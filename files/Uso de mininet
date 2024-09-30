@@ -1,0 +1,23 @@
+Correr mininet:
+
+1) sudo mn --topo single,2 --link tc,bw=10,delay=10ms,loss=10
+
+    sudo mn: Este comando inicia Mininet con permisos de superusuario. Mininet necesita estos permisos para crear interfaces de red y manejar los recursos del sistema.
+
+    --topo single,2: Define la topología de la red que se va a crear.
+        single indica una topología de árbol simple, con un solo switch.
+        2 especifica el número de hosts que se conectan al switch. En este caso, tendrás una topología con un switch y dos hosts.
+
+    --link tc: Especifica que se usará el módulo de traffic control (tc) de Linux para gestionar las características del enlace (ancho de banda, latencia, pérdida de paquetes). Esto permite ajustar 
+            los parámetros de los enlaces entre los hosts y el switch de manera controlada.
+
+    bw=10: Define el ancho de banda máximo para los enlaces en la red. En este caso, cada enlace tiene un ancho de banda de 10 Mbps.
+
+    delay=10ms: Establece la latencia (o retraso) del enlace. Aquí, cada paquete que se envía a través de la red experimentará un retraso de 10 milisegundos.
+
+    loss=10: Introduce una pérdida de paquetes del 10% en los enlaces. Esto significa que, aproximadamente, el 10% de los paquetes enviados a través de la red no llegarán a su destino, simulando un entorno de red con fallos o congestión.
+
+2) Para ejecutar un programa en segundo plano (en este caso el servidor), se debe emplear: "h1 python3 start-server.py -H 10.0.0.1 -p 10000 &"
+
+3) Para ejecutar un programa en primer plano (en este caso el cliente), se debe emplear: "h2 python3 upload.py --protocol 1 -H 10.0.0.1 -p 10000 -s client_files -n dragon_image.jpg"
+

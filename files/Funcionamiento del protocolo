@@ -1,0 +1,60 @@
+
+Como funciona el protocolo SACK?
+
+CLIENTE:
+1) Upload:
+Desde aca creo un socket y le seteo un timeout de 1 segundo. 
+Inicializo un protocolo con el socket y la direccion.
+Llamo al a funcion send del protcolo con: nombre del archivo y el tipo de mensaje (en este caso 1 porque ese elegimos para el upload)
+
+2) Protocolo:
+Dentro del protocolo se recibe en la funcion send el nombre del archivo y el tipo de mensaje.
+A partir de estos datos se crea un segmento que contiene el tipo de mensaje, el numero de secuencia actual (0), el tipo de protocolo a emplear, el largo del contenido del paquete y el contenido de paquete.
+
+
+SERVIDOR:
+
+1) Creacion del socket:
+Desde aca creo un socket y le seteo un timeout de 1 segundo.
+Ajusto el tamaño del buffer de recepción del socket a 5MB (5 * 1024 * 1024 bytes).
+Asocio el socket a la dirección IP 10.0.0.1 y al puerto 10000, permitiendo que el socket escuche en esa dirección y puerto para recibir datos.
+
+Creo una lista que contiene las referencias a todos los threads creados.
+Creo un diccionario de clientes (Clave: Client_address, Valor: Protocolo_SACK)
+
+2)Conexion de clientes:
+Mientras el servidor no este cerrado, recibo paquetes de los clientes de tamaño BUF_SIZE.
+Al recibir estos corroboro la direccion del cliente:
+    Si tengo registro de la direccion en mi diccionario clientes: Coloco en la receiver_queue de mi protocolo el paquete recibido.
+    Si NO tengo regirstro de la direccion en mi diccionario clientes: Creo una instancia de protocolo con el server_socket y la direccion del cliente, agrego ese nuevo cliente a mi diccionario, y finalmente coloco en la 
+        receiver_queue de mi protocolo el paquete recibido.
+
+Luego separo el contenido recibido en HEADER(8 bytes) y PAYLOAD(lo demas).
+Cada instancia de protocolo_SACK tiene una variable booleana para indicar si es el primer paquete recibido o no:
+    Si el numero de secuencia del paquete es 0 y este booleano se encuentra en False: Llamo a la funcion receive_first_pkt() para obtener el primer paquete
+        que contendrá el nombre del archivo recibido en su payload. Ademas, del mismo header obtengo el tipo de operacion (si es Upload o Download).
+    Si NO se cumplen estas dos condiciones: No se hace nada y se continua la ejecucion del while.
+
+Que hace receive() de la clase Protocol_SACK?
+El protocolo_SACK cuenta con una queue exclusiva para su primer paquete por lo que al llamar a receive_first_pkt lo que se hace es un pop de esta queue que se encuentra almacenada dentro del protocolo_SACK.
+
+
+Segun el tipo de mensaje obtenido del header, se crea un thread para la funcion download_server o upload_server respectivamente a la cual se le envia una referencia al protocolo y el nombre del archivo decodificado.
+
+3)Uploaded_Server: Thread que recibe los paquetes que le envia un cliente.
+Llamo a la funcion receive() de mi protocolo (No confundir con receive_first_pkt() que si bien actua similar, esta contiene solo el nombre del archivo). Esta funcion hace un pop del PAYLOAD de un elemento de mi receiver_queue 
+del protocolo y lo almacena en un buffer. 
+Crea o sobreescribe un archivo llamado {file_name} dentro de la carpeta server_files para escritura. 
+Iterativamente hago voy desencolando elementos de mi queue y almacenandolo en un buffer mientras que este no tenga un \n. Al encontrarlo, le indico al protocolo que finalizó su tarea y el thread finaliza.
+
+
+Que hace receive() de la clase Protocol_SACK?
+
+
+4)Download_server:
+
+
+
+
+
+

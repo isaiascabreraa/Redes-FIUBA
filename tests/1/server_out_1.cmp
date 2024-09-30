@@ -1,0 +1,11 @@
+usage: start-server [-h] [-v | -q] [-H ADDR] [-p PORT] [-s FILEPATH] [-n FILENAME]
+
+<command description >
+
+optional arguments: 
+  -h, --help    show this help message and eclient_threadit
+  -v, --verbose increase output verbosity
+  -q, --quiet   decrease output verbosity
+  -h, --host    server IP address
+  -p, --port    server port
+  -s, --storage storage dir path
