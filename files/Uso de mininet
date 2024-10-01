@@ -17,7 +17,11 @@ Correr mininet:
 
     loss=10: Introduce una pérdida de paquetes del 10% en los enlaces. Esto significa que, aproximadamente, el 10% de los paquetes enviados a través de la red no llegarán a su destino, simulando un entorno de red con fallos o congestión.
 
-2) Para ejecutar un programa en segundo plano (en este caso el servidor), se debe emplear: "h1 python3 start-server.py -H 10.0.0.1 -p 10000 &"
+2)UPLOAD:
+h1 python3 start-server.py -H 10.0.0.1 -p 10000 -s server_files &
+h2 python3 upload.py --protocol 1 -H 10.0.0.1 -p 10000 -s client_files -n dragon_image.jpg
 
-3) Para ejecutar un programa en primer plano (en este caso el cliente), se debe emplear: "h2 python3 upload.py --protocol 1 -H 10.0.0.1 -p 10000 -s client_files -n dragon_image.jpg"
+3)DOWNLOAD:
+h1 python3 start-server.py -H 10.0.0.1 -p 10000 -s server_files &
+h2 python3 download.py --protocol 0 -H 10.0.0.1 -p 10000 -d client_files -n dragon_image.jpg
 

@@ -23,7 +23,9 @@ def create_segment(msg_type, seq_num, protocol, p_len, payload):
 
     segment = bytearray()
     segment += header
-    segment += payload
+
+    if payload != None:
+        segment += payload
 
     return segment
 

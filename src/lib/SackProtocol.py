@@ -131,7 +131,6 @@ class SackProtocol:
         self.sender.join()
 
     def put(self, pkt):
-        # print("Poniendo paquete en cola de receiver")
         self.receiver_queue.put(pkt)
 
     def send(self, payload, msg_type):

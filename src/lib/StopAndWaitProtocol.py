@@ -66,7 +66,7 @@ class StopAndWaitProtocol:
                     self.timeout_event.set()
             else:
                 print_msg("Contestando paquete", self.role)
-                self.socket.sendto(pf.create_segment(2, pf.get_seq_num(header), 0, 0, b'x00'), self.address)  # Mando ACK
+                self.socket.sendto(pf.create_segment(2, pf.get_seq_num(header), 0, 0, None), self.address)  # Mando ACK
                 if pf.get_seq_num(header) != self.last_seq_num_received:  # Si no es un paquete repetido
                     self.receiver_return_queue.put(payload)
                     self.last_seq_num_received = pf.get_seq_num(header)
