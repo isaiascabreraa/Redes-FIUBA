@@ -109,7 +109,6 @@ class SackProtocol:
         self.socket = skt
         self.address = address
 
-        self.timeout = 0.08
         self.close_event = threading.Event()
 
         self.sender_queue = queue.Queue()
@@ -203,6 +202,8 @@ class SackProtocol:
                     else:
                         payload += pkt[1]
                 self.receiver_num_seq_expected += len(pkt[1])
+                
+            break
 
         self.receiver_return_queue.put(payload)
 
